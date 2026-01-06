@@ -32,7 +32,7 @@ class DBSettings(BaseSettings):
 
 class AuthSettings(BaseSettings):
     cookie_name: str = "sessionid"
-    device_id_cookie_name: str = "deviceID"
+    device_id_cookie_name: str = "deviceid"
     secret_key: str = "super-secret-key"
     httponly: bool = True
     cookie_max_age: int = 60 * 60 * 24 * 7

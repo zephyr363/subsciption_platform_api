@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config import settings
-from app.routes.v1 import v1_routes
+from app.presentation.http.v1 import v1_routes
 
 
 app = FastAPI()
