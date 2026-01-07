@@ -1,11 +1,12 @@
 from typing import Annotated
-from uuid import UUID, uuid4
-from fastapi import APIRouter, Depends, Response, Request, HTTPException
+from uuid import UUID
 
-from app.config import settings
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
+
 from app.application.dto.user import UserLogin
+from app.config import settings
 from app.dependencies import UserSessionLoginUseCase, session_login_uc
-from app.domain.exceptions.user import UserNotFound
+from app.infrastructure.exceptions import UserNotFoundError
 
 session_routes = APIRouter(prefix="/session", tags=["Session"])
 
@@ -15,19 +16,20 @@ session_routes = APIRouter(prefix="/session", tags=["Session"])
     description="Create session for user",
 )
 async def login(
-    request: Request,
     response: Response,
     payload: UserLogin,
     uc: Annotated[UserSessionLoginUseCase, Depends(session_login_uc)],
+    device_id: Annotated[
+        UUID | None,
+        Cookie(include_in_schema=False, alias=settings.auth.device_id_cookie_name),
+    ] = None,
 ):
-    device_id = request.cookies.get(settings.auth.device_id_cookie_name)
     try:
         res = await uc.execute(
-            # заглушка, исправить валидацию UUID
-            UUID(device_id) if device_id else uuid4(),
+            device_id,
             payload,
         )
-    except UserNotFound as err:
+    except UserNotFoundError as err:
         raise HTTPException(
             status_code=404,
             detail=str(err),

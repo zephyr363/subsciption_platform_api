@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from .user import user_routes
 from .session import session_routes
+from .user import user_routes
 
 v1_routes = APIRouter(prefix="/v1")
 

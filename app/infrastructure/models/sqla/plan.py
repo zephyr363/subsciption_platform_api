@@ -1,9 +1,11 @@
-from .base import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import UUID, String, Numeric
-from decimal import Decimal
 import uuid
+from decimal import Decimal
 from typing import TYPE_CHECKING, List
+
+from sqlalchemy import UUID, Numeric, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from .base import Base
 
 if TYPE_CHECKING:
     from .subscription import Subscription

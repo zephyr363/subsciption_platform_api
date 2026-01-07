@@ -1,9 +1,11 @@
-from datetime import datetime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import UUID, DateTime, String, func
 import uuid
-from .base import Base
+from datetime import datetime
 from typing import TYPE_CHECKING, List
+
+from sqlalchemy import UUID, DateTime, String, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from .base import Base
 
 if TYPE_CHECKING:
     from .session import Session

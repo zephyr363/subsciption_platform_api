@@ -4,11 +4,12 @@ from enum import Enum
 from typing import Optional
 from uuid import UUID, uuid4
 
-from .plan import PlanEntity
-from app.domain.exceptions.subscription import (
+from app.domain.exceptions import (
     CannotCancelSubscriptionError,
     SubscriptiopnActivationError,
 )
+
+from .plan import PlanEntity
 
 
 class SubscriptionStatus(Enum):

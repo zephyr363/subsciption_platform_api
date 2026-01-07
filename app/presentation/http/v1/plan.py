@@ -1,8 +1,9 @@
 from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from app.application.dto.plan import PlanCreate
-from app.dependencies import create_plan_uc, CreatePlanUseCase
+from app.dependencies import CreatePlanUseCase, create_plan_uc
 
 plan_routes = APIRouter(prefix="/plans", tags=["Plans"])
 

@@ -21,7 +21,7 @@ class PlanEntity:
         price: float,
         duration_days: int,
         is_trial: bool = False,
-    ) -> "PlanEntity":
+    ):
         return cls(
             id=uuid4(),
             name=name,

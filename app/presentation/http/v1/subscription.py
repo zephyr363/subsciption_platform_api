@@ -1,10 +1,16 @@
 from typing import Annotated
 from uuid import UUID
-from fastapi import APIRouter, Depends
+
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.dependencies import (
-    create_trial_subscription_uc,
     CreateTrialSubscriptionUseCase,
+    create_trial_subscription_uc,
+)
+from app.infrastructure.exceptions import (
+    PlanNotFoundError,
+    SubscriptionSaveError,
+    SubscriptionAlreadyExistsError,
 )
 
 subscription_routes = APIRouter(prefix="/subscriptions", tags=["Plans"])
@@ -21,4 +27,14 @@ async def create_trial_subscription(
         Depends(create_trial_subscription_uc),
     ],
 ):
-    return await uc.execute(user_id=user_id)
+    try:
+        return await uc.execute(user_id=user_id)
+    except (
+        PlanNotFoundError,
+        SubscriptionSaveError,
+        SubscriptionAlreadyExistsError,
+    ) as err:
+        raise HTTPException(
+            status_code=400,
+            detail=str(err),
+        ) from err

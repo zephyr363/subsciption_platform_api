@@ -1,9 +1,8 @@
 from .base import Base, async_session
-from .session import Session
-from .user import User
 from .plan import Plan
+from .session import Session
 from .subscription import Subscription, SubscriptionStatus
-
+from .user import User
 
 __all__ = [
     "Base",

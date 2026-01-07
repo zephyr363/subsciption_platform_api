@@ -1,8 +1,10 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends
 
-from app.dependencies import CreateUserUseCase, user_create_uc
+from fastapi import APIRouter, Depends, HTTPException
+
 from app.application.dto.user import UserCreate, UserList
+from app.dependencies import CreateUserUseCase, user_create_uc
+from app.infrastructure.exceptions import UserAlreadyExistsError
 
 user_routes = APIRouter(
     prefix="/users",
@@ -19,4 +21,7 @@ async def create_user(
     payload: UserCreate,
     uc: Annotated[CreateUserUseCase, Depends(user_create_uc)],
 ):
-    return await uc.execute(payload)
+    try:
+        return await uc.execute(payload)
+    except UserAlreadyExistsError as err:
+        raise HTTPException(status_code=400, detail=str(err)) from err

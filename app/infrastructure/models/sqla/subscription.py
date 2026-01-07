@@ -1,11 +1,15 @@
-from datetime import datetime
-from app.domain.entities.subscription import SubscriptionStatus
-from .base import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import UUID, DateTime, ForeignKey, Enum as SQLAEnum
 import uuid
-
+from datetime import datetime
 from typing import TYPE_CHECKING
+
+from sqlalchemy import UUID, DateTime
+from sqlalchemy import Enum as SQLAEnum
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.domain.entities.subscription import SubscriptionStatus
+
+from .base import Base
 
 if TYPE_CHECKING:
     from .plan import Plan

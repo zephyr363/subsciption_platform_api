@@ -1,4 +1,5 @@
 from uuid import UUID
+
 from pydantic import BaseModel
 
 from app.infrastructure.models.sqla import SubscriptionStatus

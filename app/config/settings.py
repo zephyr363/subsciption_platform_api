@@ -1,7 +1,8 @@
+from pathlib import Path
 from typing import Literal
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import URL
-from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent.parent
 ENV_DIR = BASE_DIR / "env"

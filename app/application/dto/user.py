@@ -1,6 +1,7 @@
 from typing import Optional
-from pydantic import BaseModel, EmailStr, ConfigDict
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class UserList(BaseModel):

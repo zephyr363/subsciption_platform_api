@@ -1,9 +1,11 @@
 import uuid
-from datetime import datetime, UTC
-from sqlalchemy import UUID, DateTime, ForeignKey
-from .base import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
+
+from sqlalchemy import UUID, DateTime, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from .base import Base
 
 if TYPE_CHECKING:
     from .user import User

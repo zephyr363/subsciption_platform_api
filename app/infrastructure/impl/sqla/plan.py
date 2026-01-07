@@ -1,12 +1,13 @@
-from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import select
-from app.domain.entities import PlanEntity
-from app.domain.interfaces.plan import IPlanRepository
-
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.domain.entities import PlanEntity
+from app.domain.interfaces.plan import IPlanRepository
+from app.infrastructure.exceptions import PlanNotFoundError
+from app.infrastructure.mappers.sqla import PlanMapping
 from app.infrastructure.models.sqla import Plan
 
 
@@ -18,53 +19,22 @@ class PlanRepositoryImpl(IPlanRepository):
         self,
         entity: PlanEntity,
     ) -> PlanEntity:
-        plan = Plan(
-            id=entity.id,
-            name=entity.name,
-            description=entity.features,
-            price=entity.price,
-            duration_days=entity.duration_days,
-            is_trial=entity.is_trial,
-            is_active=entity.is_active,
-        )
+        plan = PlanMapping.to_orm(entity)
         self.db_session.add(plan)
-        await self.db_session.commit()
-        await self.db_session.refresh(plan)
-        return PlanEntity(
-            id=plan.id,
-            name=plan.name,
-            features=plan.features,
-            price=plan.price,
-            duration_days=plan.duration_days,
-            is_trial=plan.is_trial,
-            is_active=plan.is_active,
-        )
+        return PlanMapping.from_orm(plan)
 
-    async def get_by_id(self, plan_id: UUID) -> Optional[PlanEntity]:
+    async def get_by_id(self, plan_id: UUID) -> PlanEntity:
         result = await self.db_session.get(Plan, plan_id)
-        if result:
-            return PlanEntity(
-                id=result.id,
-                name=result.name,
-                features=result.features,
-                price=result.price,
-                duration_days=result.duration_days,
-                is_trial=result.is_trial,
-                is_active=result.is_active,
-            )
+        if not result:
+            raise PlanNotFoundError("PLan not found")
+        return PlanMapping.from_orm(result)
 
-    async def get_trial_plan(self) -> Optional[PlanEntity]:
+    async def get_trial_plan(self) -> PlanEntity:
         query = await self.db_session.execute(
             select(Plan).where(Plan.is_trial & Plan.is_active)
         )
-        result = query.scalars().first()
-        if result:
-            return PlanEntity(
-                id=result.id,
-                name=result.name,
-                features=result.features,
-                price=result.price,
-                duration_days=result.duration_days,
-                is_trial=result.is_trial,
-                is_active=result.is_active,
-            )
+        try:
+            res = query.scalar_one()
+        except NoResultFound:
+            raise PlanNotFoundError("Plan not found")
+        return PlanMapping.from_orm(res)
