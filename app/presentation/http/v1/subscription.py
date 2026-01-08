@@ -9,8 +9,8 @@ from app.dependencies import (
 )
 from app.infrastructure.exceptions import (
     PlanNotFoundError,
-    SubscriptionSaveError,
     SubscriptionAlreadyExistsError,
+    SubscriptionSaveError,
 )
 
 subscription_routes = APIRouter(prefix="/subscriptions", tags=["Plans"])

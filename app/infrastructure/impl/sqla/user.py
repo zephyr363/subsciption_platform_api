@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.domain.entities import UserEntity
 from app.domain.interfaces.user import IUserRepository
-from app.infrastructure.exceptions import UserAlreadyExistsError
+from app.infrastructure.exceptions import UserAlreadyExistsError, UserNotFoundError
 from app.infrastructure.mappers.sqla.user import UserMapping
 from app.infrastructure.models.sqla import User
 
@@ -33,5 +33,5 @@ class UserRepositoryImpl(IUserRepository):
         try:
             user = res.scalar_one()
         except NoResultFound:
-            raise UserAlreadyExistsError("User with this email already exists")
+            raise UserNotFoundError("User not found")
         return UserMapping.from_orm(user)

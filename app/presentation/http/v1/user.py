@@ -16,6 +16,7 @@ user_routes = APIRouter(
     "/",
     description="Create user",
     response_model=UserList,
+    status_code=201,
 )
 async def create_user(
     payload: UserCreate,

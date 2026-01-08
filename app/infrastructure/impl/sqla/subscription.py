@@ -1,15 +1,15 @@
 from uuid import UUID
 
 from sqlalchemy import select
-from sqlalchemy.exc import NoResultFound, SQLAlchemyError, IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.domain.entities.subscription import SubscriptionEntity
 from app.domain.interfaces.subscription import ISubscriptionRepository
 from app.infrastructure.exceptions import (
+    SubscriptionAlreadyExistsError,
     SubscriptionNotFoundError,
     SubscriptionSaveError,
-    SubscriptionAlreadyExistsError,
 )
 from app.infrastructure.mappers.sqla import SubscriptionMapping
 from app.infrastructure.models.sqla import Subscription
